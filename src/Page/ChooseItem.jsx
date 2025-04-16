@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { itemContext } from "../Context/ItemContext";
+import NavBar from "../Component/navbar";
 
 function ChooseItem() {
-  const [product, setProduct] = useState([]);
+  const { product, setProduct, cart, setCart } = useContext(itemContext);
 
   const CallBackend = async () => {
     const result = await axios.get("http://localhost:3000/production");
@@ -13,16 +15,26 @@ function ChooseItem() {
       CallBackend();
     }
   }, [product]);
+  //add to cart
+  console.log(cart);
+  const addintoCart = prod => {
+    setCart(prev => [...prev, prod]);
+  };
 
   return (
-    <div className="min-h-screen bg-green-200">
-      <div className="product-display mt-50 h-100 bg-red-300 w-full">
-        <div className="title text-center font-bold text-3xl"> Items</div>
-        <div className="items">
+    <div className="min-h-screen  ">
+      <NavBar />
+      <div className="product-display mt-50 h-100  w-full">
+        <div className="title text-center font-bold text-3xl mb-5"> Items</div>
+        <div className="items px-30 border-1 p-5">
           {product.length > 0 ? (
             <div className="flex justify-center items-center gap-4 h-90">
               {product.map(prod => (
-                <div className="item bg-white w-1/3 h-full">
+                <div
+                  className="item bg-white w-1/3 h-full"
+                  key={prod?.id}
+                  onClick={() => addintoCart(prod?.id)}
+                >
                   <div>
                     <img
                       src={prod?.image}
