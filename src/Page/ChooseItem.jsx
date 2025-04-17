@@ -4,7 +4,8 @@ import { itemContext } from "../Context/ItemContext";
 import NavBar from "../Component/navbar";
 
 function ChooseItem() {
-  const { product, setProduct, cart, setCart } = useContext(itemContext);
+  const { product, setProduct, cart, setCart, postCart } =
+    useContext(itemContext);
 
   const CallBackend = async () => {
     const result = await axios.get("http://localhost:3000/production");
@@ -19,6 +20,7 @@ function ChooseItem() {
   console.log(cart);
   const addintoCart = prod => {
     setCart(prev => [...prev, prod]);
+    postCart(prod);
   };
 
   return (
